@@ -10,16 +10,16 @@ const Todo = ({ todos, getTodos, loading }) => {
   }, [getTodos]);
 
   const [formData, setFormData] = useState({
-    todo: '',
+    title: '',
+    date:''
   });
 
-  console.log(todos);
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const { todo } = formData;
+  const { title,date } = formData;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -38,14 +38,25 @@ const Todo = ({ todos, getTodos, loading }) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="todo" id="todoLabel">
+        <label htmlFor="title" id="titleLabel">
           <input
             type="text"
-            name="todo"
-            id="todo"
+            name="title"
+            id="title"
             onChange={e => onChange(e)}
-            value={todo}
+            value={title}
             placeholder="Enter a task"
+            required
+          />
+        </label>
+        <label htmlFor="date" id="dateLabel">
+          <input
+            type="text"
+            name="date"
+            id="date"
+            onChange={e => onChange(e)}
+            value={date}
+            placeholder="Enter deadline!"
             required
           />
         </label>
