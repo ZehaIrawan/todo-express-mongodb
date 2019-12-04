@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { addTodo, getTodos } from '../actions/todo';
+import { addTodo, deleteTodo, getTodos } from '../actions/todo';
 import { TodoItem } from './TodoItem';
 
-const Todo = ({ todos, getTodos, loading, addTodo }) => {
+const Todo = ({ todos, getTodos, loading, addTodo, deleteTodo }) => {
   useEffect(() => {
     getTodos();
   }, [getTodos]);
@@ -22,8 +22,6 @@ const Todo = ({ todos, getTodos, loading, addTodo }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-
-    console.log(formData);
     addTodo(formData);
   };
 
@@ -62,9 +60,15 @@ const Todo = ({ todos, getTodos, loading, addTodo }) => {
         </label>
         <button type="submit">Add Task</button>
       </form>
-      <TodoItem key={12} title={"test"} date={"test"} />
+
       {todos.map(todo => (
-        <TodoItem key={todo.id} title={todo.title} date={todo.date} />
+        <TodoItem
+          key={todo.id}
+          title={todo.title}
+          date={todo.date}
+          deleteTodo={deleteTodo}
+          id={todo.id}
+        />
       ))}
     </div>
   );
@@ -78,4 +82,6 @@ const mapStateToProps = state => ({
   loading: state.todos.loading,
 });
 
-export default connect(mapStateToProps, { getTodos, addTodo })(Todo);
+export default connect(mapStateToProps, { getTodos, addTodo, deleteTodo })(
+  Todo,
+);
