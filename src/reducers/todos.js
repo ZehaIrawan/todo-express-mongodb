@@ -1,4 +1,10 @@
-import { ADD_TODO, DELETE_TODO, GET_TODOS } from '../actions/types';
+import {
+  ADD_TODO,
+  DELETE_TODO,
+  EDIT_TODO,
+  GET_TODOS,
+  UPDATE_TODO,
+} from '../actions/types';
 
 const initialState = {
   todos: [],
@@ -22,6 +28,34 @@ const todos = (state = initialState, action) => {
       return {
         ...state,
         todos: state.todos.filter(todo => todo.id !== payload),
+        loading: false,
+      };
+    case EDIT_TODO:
+      return {
+        ...state,
+        todo: [payload],
+        loading: false,
+      };
+    case UPDATE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map(item => {
+          // Find the item with the matching id
+
+          if (item.id === payload[0].id) {
+            // Return a new object
+
+            return {
+              ...item, // copy the existing item
+              title: payload[0].title,
+              date: payload[0].date,
+            };
+          }
+          // Leave every other item unchanged
+
+          return item;
+        }),
+
         loading: false,
       };
     default:

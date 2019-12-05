@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { addTodo, deleteTodo, getTodos } from '../actions/todo';
-import { TodoItem } from './TodoItem';
+import TodoItem  from './TodoItem';
 
 const Todo = ({ todos, getTodos, loading, addTodo, deleteTodo }) => {
   useEffect(() => {

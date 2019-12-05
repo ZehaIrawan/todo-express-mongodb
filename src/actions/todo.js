@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_TODOS,ADD_TODO, DELETE_TODO } from './types';
+import { ADD_TODO, DELETE_TODO, GET_TODOS,UPDATE_TODO,EDIT_TODO } from './types';
 
 // Get Todos
 export const getTodos = () => async dispatch => {
@@ -30,7 +30,7 @@ export const addTodo = formData => async dispatch => {
       type: ADD_TODO,
       payload: res.data,
     });
-    getTodos()
+    getTodos();
   } catch (err) {
     console.log(err);
   }
@@ -45,8 +45,39 @@ export const deleteTodo = id => async dispatch => {
       type: DELETE_TODO,
       payload: id,
     });
-
   } catch (err) {
     console.log(err);
+  }
+};
+
+//Update todo
+export const updateTodo= (id, formData) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  console.log(id,formData);
+  try {
+    const res = await axios.put(`/todos/${id}`, formData, config);
+
+    dispatch({
+      type: UPDATE_TODO,
+      payload: res.data,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// Edit Todo
+export const editTodo = formData => async dispatch => {
+  try {
+    dispatch({
+      type: EDIT_TODO,
+      payload: formData,
+    });
+  } catch (err) {
+console.log(err);
   }
 };
