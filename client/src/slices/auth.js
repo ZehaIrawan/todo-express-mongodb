@@ -1,52 +1,48 @@
 import { createSlice } from '@reduxjs/toolkit';
+import api from '../utils/api'
 
-export const initialState = {
-  token: localStorage.getItem('token'),
-  isAuthenticated: null,
-  loading: true,
-  user: null
-};
-
-const postsSlice = createSlice({
+// Slice
+const slice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: {
+    token: localStorage.getItem('token'),
+    isAuthenticated: null,
+    loading: true,
+    user: null,
+  },
   reducers: {
-    getPosts: (state) => {
-      state.loading = true;
+    loginSuccess: (state, action) => {
+      state.auth = action.payload;
     },
-    getPostsSuccess: (state, { payload }) => {
-      state.posts = payload;
-      state.loading = false;
-      state.hasErrors = false;
-    },
-    getPostsFailure: (state) => {
-      state.loading = false;
-      state.hasErrors = true;
+    logoutSuccess: (state, action) => {
+      state.user = null;
     },
   },
 });
 
-export const {
-  getPosts,
-  getPostsSuccess,
-  getPostsFailure,
-} = postsSlice.actions;
-export const postsSelector = (state) => state.posts;
-export default postsSlice.reducer;
+export default slice.reducer;
 
-export function fetchPosts() {
-  return async (dispatch) => {
-    dispatch(getPosts());
+// Actions
+const { loginSuccess, logoutSuccess } = slice.actions;
 
-    try {
-      const response = await fetch(
-        'https://jsonplaceholder.typicode.com/posts',
-      );
-      const data = await response.json();
+export const login = ({ email, password }) => async (dispatch) => {
 
-      dispatch(getPostsSuccess(data));
-    } catch (error) {
-      dispatch(getPostsFailure());
-    }
-  };
-}
+  const body = { email, password };
+
+  try {
+    const res = await api.post((`/auth`),body);
+    console.log(res.data);
+    dispatch(loginSuccess({ email }));
+  } catch (e) {
+    return console.error(e.message);
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    // const res = await api.post('/api/auth/logout/')
+    return dispatch(logoutSuccess());
+  } catch (e) {
+    return console.error(e.message);
+  }
+};

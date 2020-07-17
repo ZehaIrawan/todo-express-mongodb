@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import {useDispatch, useSelector} from 'react-redux'
+import {login,logout} from '../slices/auth'
 
 const Signin = () => {
   const [formData, setFormData] = useState({
@@ -8,9 +10,11 @@ const Signin = () => {
 
   const { email, password } = formData;
 
+  const dispatch = useDispatch()
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+    dispatch(login({email,password}))
   };
 
   const onChange = (e) =>
