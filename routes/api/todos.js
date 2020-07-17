@@ -73,4 +73,44 @@ router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
   }
 });
 
+// @route    Put api/todos/:id
+// @desc     Update a todo
+// @access   Private
+router.put(
+  '/:id',
+  [
+    auth,
+    checkObjectId('id'),
+    [check('title', 'Title is required').not().isEmpty()],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const todo = await Todo.findById(req.params.id);
+
+      if (!todo) {
+        return res.status(404).json({ msg: 'Todo not found' });
+      }
+      // Check user
+      if (todo.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }
+
+      todo.title = req.body.title;
+
+      await todo.save();
+
+      res.json({ msg: 'Todo Updated' });
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send('Server Error');
+    }
+  },
+);
+
 module.exports = router;
