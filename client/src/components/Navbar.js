@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   const guestLinks = (
     <Fragment>
