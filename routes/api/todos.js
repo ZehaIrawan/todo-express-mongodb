@@ -3,6 +3,7 @@ const router = express.Router();
 const Todo = require('../../models/Todo');
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
+const checkObjectId = require('../../middleware/checkObjectId');
 
 router.post(
   '/',
@@ -20,7 +21,7 @@ router.post(
 
       const newTodo = new Todo({
         title: req.body.title,
-        user: req.user.id 
+        user: req.user.id,
       });
 
       const todo = await newTodo.save();
@@ -38,7 +39,7 @@ router.post(
 // @access   Private
 router.get('/', auth, async (req, res) => {
   try {
-    const todos = await Todo.find({user:req.user.id}).sort({ date: -1 });
+    const todos = await Todo.find({ user: req.user.id }).sort({ date: -1 });
     res.json(todos);
   } catch (err) {
     console.error(err.message);
@@ -49,7 +50,7 @@ router.get('/', auth, async (req, res) => {
 // @route    DELETE api/todos/:id
 // @desc     Delete a todo
 // @access   Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
 
