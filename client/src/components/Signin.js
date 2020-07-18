@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
-import {login,logout} from '../slices/auth'
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { login } from '../slices/auth';
 
 const Signin = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -10,15 +15,17 @@ const Signin = () => {
 
   const { email, password } = formData;
 
-  const dispatch = useDispatch()
-
   const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login({email,password}))
+    dispatch(login({ email, password }));
   };
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div>

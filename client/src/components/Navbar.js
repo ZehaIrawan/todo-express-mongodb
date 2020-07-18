@@ -1,8 +1,12 @@
 import React, { Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { logout } from '../slices/auth';
 
 const Navbar = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  const dispatch = useDispatch();
 
   const guestLinks = (
     <Fragment>
@@ -15,7 +19,9 @@ const Navbar = () => {
   const AuthLinks = (
     <Fragment>
       <Link to="/">Todo</Link>
-      <h2 onClick={console.log('logout')}>Logout</h2>
+      <Link to="/" onClick={() => dispatch(logout())}>
+        Logout
+      </Link>
     </Fragment>
   );
 

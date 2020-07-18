@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
+const auth = require('../../middleware/auth');
 
 router.post(
   '/',
@@ -67,5 +68,21 @@ router.post(
     }
   },
 );
+
+router.get('/', auth, async (req, res) => {
+  try {
+    console.log(req.user.id);
+    let user = await User.findById(req.user.id).select(['-password','-date','-__v'])
+
+    if (!user) {
+      return res.status(400).json({ msg: 'User not found' });
+    }
+
+    res.send(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;

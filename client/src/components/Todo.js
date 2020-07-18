@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 const Todo = () => {
   const [todo, setTodo] = useState('');
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div>
@@ -21,4 +28,4 @@ const Todo = () => {
   );
 };
 
-export default connect()(Todo);
+export default Todo;
