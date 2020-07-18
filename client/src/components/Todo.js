@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTodos } from '../slices/todos';
 
 const Todo = () => {
   const [todo, setTodo] = useState('');
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
 
-  if (isAuthenticated) {
-    return <Redirect to="/" />;
+  useEffect(() => {
+    dispatch(fetchTodos());
+  }, []);
+  const loading = useSelector((state) => state.todos.loading);
+  const todos = useSelector((state) => state.todos.todos);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
   }
+
+  console.log(todos);
 
   return (
     <div>
@@ -24,6 +32,13 @@ const Todo = () => {
         onChange={(e) => setTodo(e.target.value)}
       />
       <button>Add todo</button>
+      {todos.map((todo) => {
+        return (
+          <ul key="todo.id">
+            <li>{todo.title}</li>
+          </ul>
+        );
+      })}
     </div>
   );
 };

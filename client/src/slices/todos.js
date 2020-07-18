@@ -1,46 +1,51 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import api from '../utils/api';
 
 export const initialState = {
   todos: [],
   todo: null,
   loading: true,
-  error: {}
-}
+  error: {},
+};
 
-const postsSlice = createSlice({
-  name: 'posts',
+const todosSlice = createSlice({
+  name: 'todos',
   initialState,
   reducers: {
-    getPosts: state => {
-      state.loading = true
+    getTodos: (state) => {
+      state.loading = true;
     },
-    getPostsSuccess: (state, { payload }) => {
-      state.posts = payload
-      state.loading = false
-      state.hasErrors = false
+    getTodosSuccess: (state, { payload }) => {
+      state.todos = payload;
+      state.loading = false;
+      state.hasErrors = false;
     },
-    getPostsFailure: state => {
-      state.loading = false
-      state.hasErrors = true
+    getTodosFailure: (state) => {
+      state.loading = false;
+      state.hasErrors = true;
     },
   },
-})
+});
 
-export const { getPosts, getPostsSuccess, getPostsFailure } = postsSlice.actions
-export const postsSelector = state => state.posts
-export default postsSlice.reducer
+export const {
+  getTodos,
+  getTodosSuccess,
+  getTodosFailure,
+} = todosSlice.actions;
 
-export function fetchPosts() {
-  return async dispatch => {
-    dispatch(getPosts())
+export const TodosSelector = (state) => state.todos;
+export default todosSlice.reducer;
+
+export function fetchTodos() {
+  return async (dispatch) => {
+    dispatch(getTodos());
 
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts')
-      const data = await response.json()
+      const res = await api.get(`/todos`);
 
-      dispatch(getPostsSuccess(data))
+      dispatch(getTodosSuccess(res.data));
     } catch (error) {
-      dispatch(getPostsFailure())
+      dispatch(getTodosFailure());
     }
-  }
+  };
 }

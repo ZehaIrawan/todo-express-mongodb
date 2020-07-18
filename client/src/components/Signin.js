@@ -35,11 +35,13 @@ const Signin = () => {
           value={email}
           onChange={(e) => onChange(e)}
           name="email"
+          placeholder="Your email"
         />
         <input
           type="password"
           name="password"
           value={password}
+          placeholder="Your password"
           onChange={(e) => onChange(e)}
         />
         <input type="submit" value="Signin" name="" id="" />

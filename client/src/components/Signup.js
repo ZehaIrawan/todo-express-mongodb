@@ -7,11 +7,11 @@ const Signup = () => {
     passwordConfirmation: '',
   });
 
-  const { email, password,passwordConfirmation } = formData;
+  const { email, password, passwordConfirmation } = formData;
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password,passwordConfirmation);
+    console.log(email, password, passwordConfirmation);
   };
 
   const onChange = (e) =>
@@ -19,24 +19,27 @@ const Signup = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => onSubmit(e)}>
+      <form className="login-form" onSubmit={(e) => onSubmit(e)}>
         <input
           type="email"
           value={email}
           onChange={(e) => onChange(e)}
           name="email"
+          placeholder="Your email"
         />
         <input
           type="password"
           name="password"
           value={password}
           onChange={(e) => onChange(e)}
+          placeholder="Your password"
         />
-               <input
+        <input
           type="password"
           name="passwordConfirmation"
           value={passwordConfirmation}
           onChange={(e) => onChange(e)}
+          placeholder="Confirm your password"
         />
         <input type="submit" value="Signup" name="" id="" />
       </form>

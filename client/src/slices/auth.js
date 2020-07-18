@@ -27,6 +27,7 @@ const slice = createSlice({
       state.loading = false;
       state.isAuthenticated = false;
       state.user = null;
+      localStorage.setItem('token', null);
     },
   },
 });
