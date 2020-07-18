@@ -29,7 +29,7 @@ const Signin = () => {
 
   return (
     <div>
-      <form onSubmit={(e) => onSubmit(e)}>
+      <form className="login-form" onSubmit={(e) => onSubmit(e)}>
         <input
           type="email"
           value={email}
@@ -42,7 +42,7 @@ const Signin = () => {
           value={password}
           onChange={(e) => onChange(e)}
         />
-        <input type="submit" value="signin" name="" id="" />
+        <input type="submit" value="Signin" name="" id="" />
       </form>
     </div>
   );

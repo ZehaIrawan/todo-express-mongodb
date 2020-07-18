@@ -25,7 +25,11 @@ const Navbar = () => {
     </Fragment>
   );
 
-  return isAuthenticated ? AuthLinks : guestLinks;
+  return isAuthenticated ? (
+    <nav className="nav-container">{AuthLinks}</nav>
+  ) : (
+    <nav className="nav-container">{guestLinks}</nav>
+  );
 };
 
 export default Navbar;
