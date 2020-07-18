@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../utils/api';
 
 export const initialState = {
@@ -7,6 +7,16 @@ export const initialState = {
   loading: true,
   error: {},
 };
+
+export const addTodo = createAsyncThunk(
+  'todos/addTodoStatus',
+
+  async (title) => {
+    const body = { title: title };
+    const res = await api.post(`/todos`, body);
+    return res.data
+  },
+);
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -24,6 +34,15 @@ const todosSlice = createSlice({
       state.loading = false;
       state.hasErrors = true;
     },
+    addTodoSuccess: (state) => {
+      state.loading = false;
+      state.hasErrors = false;
+    },
+  },
+  extraReducers: {
+    [addTodo.fulfilled]: (state, action) => {
+       state.todos.push(action.payload)
+    },
   },
 });
 
@@ -31,21 +50,21 @@ export const {
   getTodos,
   getTodosSuccess,
   getTodosFailure,
+  addTodoSuccess,
+  addTodos,
 } = todosSlice.actions;
 
 export const TodosSelector = (state) => state.todos;
+
 export default todosSlice.reducer;
 
-export function fetchTodos() {
-  return async (dispatch) => {
-    dispatch(getTodos());
+export const fetchTodos = () => async (dispatch) => {
+  dispatch(getTodos());
+  try {
+    const res = await api.get(`/todos`);
 
-    try {
-      const res = await api.get(`/todos`);
-
-      dispatch(getTodosSuccess(res.data));
-    } catch (error) {
-      dispatch(getTodosFailure());
-    }
-  };
-}
+    dispatch(getTodosSuccess(res.data));
+  } catch (error) {
+    dispatch(getTodosFailure());
+  }
+};

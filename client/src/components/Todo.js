@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTodos } from '../slices/todos';
+import { addTodo, fetchTodos } from '../slices/todos';
 
 const Todo = () => {
   const [todo, setTodo] = useState('');
@@ -17,7 +17,6 @@ const Todo = () => {
     return <h1>Loading...</h1>;
   }
 
-  console.log(todos);
 
   return (
     <div>
@@ -31,14 +30,12 @@ const Todo = () => {
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
       />
-      <button>Add todo</button>
-      {todos.map((todo) => {
-        return (
-          <ul key="todo.id">
-            <li>{todo.title}</li>
-          </ul>
-        );
-      })}
+      <button onClick={() => dispatch(addTodo(todo))}>Add todo</button>
+      <ul>
+        {todos.map((todo) => {
+          return <li key={todo._id}>{todo.title}</li>;
+        })}
+      </ul>
     </div>
   );
 };
