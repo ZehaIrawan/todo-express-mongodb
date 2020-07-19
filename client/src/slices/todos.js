@@ -18,15 +18,15 @@ export const addTodo = createAsyncThunk(
   },
 );
 
-export const removeTodo = createAsyncThunk(
-  'todos/removeTodoStatus',
+export const removeTodo = (id) => async (dispatch) => {
+  try {
+    await api.delete(`/todos/${id}`);
 
-  async (id) => {
-    const res = await api.delete(`/todos/${id}`);
-    return id;
-  },
-);
-
+    dispatch(removeTodoSuccess(id));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const todosSlice = createSlice({
   name: 'todos',
@@ -48,10 +48,13 @@ const todosSlice = createSlice({
       state.loading = false;
       state.hasErrors = false;
     },
+    removeTodoSuccess: (state, { payload }) => {
+      state.loading = false;
+      state.hasErrors = false;
+      state.todos = state.todos.filter((todo) => todo._id !== payload);
+    },
     updateTodoSuccess: (state, { payload }) => {
-
       state.todos = state.todos.map((item) => {
-
         if (item._id === payload.id) {
           return {
             ...item,
@@ -69,12 +72,6 @@ const todosSlice = createSlice({
     [addTodo.fulfilled]: (state, action) => {
       state.todos.push(action.payload);
     },
-    [removeTodo.fulfilled]: (state, action) => {
-      state.todos.filter((todo) => todo._id !== action.payload);
-    },
-    // [updateTodo.fulfilled]: (state, action) => {
-    //   console.log(action.payload);
-    // },
   },
 });
 
@@ -85,6 +82,7 @@ export const {
   addTodoSuccess,
   addTodos,
   updateTodoSuccess,
+  removeTodoSuccess,
 } = todosSlice.actions;
 
 export const TodosSelector = (state) => state.todos;
@@ -107,7 +105,7 @@ export const updateTodo = (id, title, isCompleted) => async (dispatch) => {
   try {
     const res = await api.put(`/todos/${id}`, body);
 
-    const params = {id, title, isCompleted};
+    const params = { id, title, isCompleted };
     dispatch(updateTodoSuccess(params));
   } catch (error) {
     console.log(error);

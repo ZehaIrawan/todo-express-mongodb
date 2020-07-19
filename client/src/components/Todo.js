@@ -33,7 +33,14 @@ const Todo = () => {
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
       />
-      <button onClick={() => dispatch(addTodo(todo))}>Add todo</button>
+      <button
+        onClick={() => {
+          dispatch(addTodo(todo));
+          setTodo('');
+        }}
+      >
+        Add todo
+      </button>
       <ul className="todolist-container">
         {todosByDate.map((todo) => {
           return (
@@ -50,10 +57,13 @@ const Todo = () => {
                   todo.isCompleted ? { textDecoration: 'line-through' } : null
                 }
               >
-                {' '}
                 {todo.title}
               </p>
-              <button onClick={() => dispatch(removeTodo(todo._id))}>
+              <button
+                onClick={() => {
+                  dispatch(removeTodo(todo._id));
+                }}
+              >
                 Delete
               </button>
             </li>
