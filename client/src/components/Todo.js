@@ -17,6 +17,10 @@ const Todo = () => {
     return <h1>Loading...</h1>;
   }
 
+  let todosByDate = todos
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return (
     <div>
       <h3>
@@ -31,7 +35,7 @@ const Todo = () => {
       />
       <button onClick={() => dispatch(addTodo(todo))}>Add todo</button>
       <ul className="todolist-container">
-        {todos.map((todo) => {
+        {todosByDate.map((todo) => {
           return (
             <li key={todo._id}>
               <input
@@ -43,7 +47,7 @@ const Todo = () => {
               ></input>
               <p
                 style={
-                  todo.isCompleted ? { textDecoration: 'line-stthrough' } : null
+                  todo.isCompleted ? { textDecoration: 'line-through' } : null
                 }
               >
                 {' '}
