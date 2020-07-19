@@ -81,7 +81,10 @@ router.put(
   [
     auth,
     checkObjectId('id'),
-    [check('title', 'Title is required').not().isEmpty()],
+    [
+      check('title', 'Title is required').not().isEmpty(),
+      check('isCompleted', 'isCompleted is required').not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -101,6 +104,7 @@ router.put(
       }
 
       todo.title = req.body.title;
+      todo.isCompleted = req.body.isCompleted;
 
       await todo.save();
 

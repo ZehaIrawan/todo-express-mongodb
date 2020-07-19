@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTodo, fetchTodos } from '../slices/todos';
+import { addTodo, fetchTodos, removeTodo, updateTodo } from '../slices/todos';
 
 const Todo = () => {
   const [todo, setTodo] = useState('');
@@ -17,7 +17,6 @@ const Todo = () => {
     return <h1>Loading...</h1>;
   }
 
-
   return (
     <div>
       <h3>
@@ -33,7 +32,21 @@ const Todo = () => {
       <button onClick={() => dispatch(addTodo(todo))}>Add todo</button>
       <ul>
         {todos.map((todo) => {
-          return <li key={todo._id}>{todo.title}</li>;
+          return (
+            <li key={todo._id}>
+              <input
+                type="checkbox"
+                checked={todo.isCompleted}
+                onChange={() =>
+                  dispatch(updateTodo(todo._id, todo.title, !todo.isCompleted))
+                }
+              ></input>
+              <p> {todo.title}</p>
+              <button onClick={() => dispatch(removeTodo(todo._id))}>
+                Delete
+              </button>
+            </li>
+          );
         })}
       </ul>
     </div>
