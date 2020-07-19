@@ -20,3 +20,8 @@
   width: 30%;
   margin: 1rem auto;
 }
+
+.todolist-container li{
+  display: flex;
+  justify-content: space-between;
+}

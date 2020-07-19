@@ -11,7 +11,7 @@ const Todo = () => {
     dispatch(fetchTodos());
   }, []);
   const loading = useSelector((state) => state.todos.loading);
-  const todos = useSelector((state) => state.todos.todos);
+  let todos = useSelector((state) => state.todos.todos);
 
   if (loading) {
     return <h1>Loading...</h1>;
@@ -30,7 +30,7 @@ const Todo = () => {
         onChange={(e) => setTodo(e.target.value)}
       />
       <button onClick={() => dispatch(addTodo(todo))}>Add todo</button>
-      <ul>
+      <ul className="todolist-container">
         {todos.map((todo) => {
           return (
             <li key={todo._id}>
@@ -41,7 +41,14 @@ const Todo = () => {
                   dispatch(updateTodo(todo._id, todo.title, !todo.isCompleted))
                 }
               ></input>
-              <p> {todo.title}</p>
+              <p
+                style={
+                  todo.isCompleted ? { textDecoration: 'line-stthrough' } : null
+                }
+              >
+                {' '}
+                {todo.title}
+              </p>
               <button onClick={() => dispatch(removeTodo(todo._id))}>
                 Delete
               </button>
